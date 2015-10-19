@@ -377,5 +377,6 @@ vw::vw()
   progress_arg = 2.0;     // next update progress dump multiplier
 
   seeded = false; // default is not to share model states
+  sf_source = false;
 }
 

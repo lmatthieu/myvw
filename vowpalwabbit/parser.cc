@@ -52,6 +52,7 @@ namespace po = boost::program_options;
 #include "vw.h"
 #include "interactions.h"
 #include "vw_exception.h"
+#include "parse_sframe.h"
 
 using namespace std;
 
@@ -1164,11 +1165,20 @@ void start_parser(vw& all, bool init_structures)
 {
   if (init_structures)
 	initialize_parser_datastructures(all);
-  #ifndef _WIN32
-  pthread_create(&all.parse_thread, nullptr, main_parse_loop, &all);
-  #else
-  all.parse_thread = ::CreateThread(nullptr, 0, static_cast<LPTHREAD_START_ROUTINE>(main_parse_loop), &all, 0L, nullptr);
+
+  if (all.sf_source) {
+#ifndef _WIN32
+      pthread_create(&all.parse_thread, nullptr, sf_main_parse_loop, &all);
+#else
+      all.parse_thread = ::CreateThread(nullptr, 0, static_cast<LPTHREAD_START_ROUTINE>(sf_main_parse_loop), &all, 0L, nullptr);
 #endif
+  } else {
+#ifndef _WIN32
+      pthread_create(&all.parse_thread, nullptr, main_parse_loop, &all);
+#else
+      all.parse_thread = ::CreateThread(nullptr, 0, static_cast<LPTHREAD_START_ROUTINE>(main_parse_loop), &all, 0L, nullptr);
+#endif
+  }
 }
 }
 void free_parser(vw& all)

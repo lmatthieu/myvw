@@ -60,6 +60,8 @@ license as described in the file LICENSE.
 #include "accumulate.h"
 #include "vw_validate.h"
 #include "vw_allreduce.h"
+#include "gen_ns.h"
+
 
 using namespace std;
 //
@@ -1035,6 +1037,32 @@ void parse_reductions(vw& all)
   all.l = setup_base(all);
 }
 
+void parse_mltools(vw& all)
+{
+  new_options(all, "MLTools")
+          ("sf_path", po::value< string >(), "SFrame file")
+          ("sf_ns", po::value< vector<string> >(), "keys to generate in namespace")
+          ("sf_meta", po::value<string>(), "meta data label:weight:id")
+          ("sf_stdout", "stdout");
+  add_options(all);
+
+
+  po::variables_map& vm = all.vm;
+  if (vm.count("sf_ns") && vm.count("sf_path") && vm.count("sf_meta")) {
+    all.sf_ns = vm["sf_ns"].as< vector<string> >();
+    all.sf_meta = vm["sf_meta"].as<string>();
+    all.sf_path = vm["sf_path"].as<string>();
+
+    if (vm.count("sf_stdout")) {
+      all.sf_source = false;
+      gen_ns(all.sf_path, all.sf_ns, all.sf_meta);
+      ::exit(0);
+    }
+    else
+      all.sf_source = true;
+  }
+}
+
 void add_to_args(vw& all, int argc, char* argv[], int excl_param_count = 0, const char* excl_params[] = NULL)
 {
   bool skip_next = false;
@@ -1175,6 +1203,8 @@ void parse_modules(vw& all, io_buf& model)
   parse_output_preds(all);
 
   parse_reductions(all);
+
+  parse_mltools(all);
 
   if (!all.quiet)
   {
