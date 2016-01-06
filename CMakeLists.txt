@@ -88,7 +88,6 @@ set(SOURCE_FILES
     vowpalwabbit/lrq.h
     vowpalwabbit/lrqfa.cc
     vowpalwabbit/lrqfa.h
-    vowpalwabbit/main.cc
     vowpalwabbit/memory.h
     vowpalwabbit/mf.cc
     vowpalwabbit/mf.h
@@ -168,7 +167,8 @@ set(SOURCE_FILES
 INCLUDE_DIRECTORIES(vowpalwabbit)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
 
-add_executable(vw ${SOURCE_FILES})
+ADD_LIBRARY(vw SHARED ${SOURCE_FILES})
+
 TARGET_LINK_LIBRARIES(vw
         ${PYTHON_SITE_PACKAGES}/sframe/libadditional_sframe_utilities.so
         ${PYTHON_SITE_PACKAGES}/sframe/libgrouped_sframe.so
@@ -177,4 +177,7 @@ TARGET_LINK_LIBRARIES(vw
         ${PYTHON_SITE_PACKAGES}/sframe/libminipsutil.so
         ${PYTHON_SITE_PACKAGES}/sframe/libunity_shared.so)
 TARGET_LINK_LIBRARIES(vw ${Boost_LIBRARIES}  ${ZLIB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+add_executable(vwexe vowpalwabbit/main.cc )
+TARGET_LINK_LIBRARIES(vwexe vw)
+
 

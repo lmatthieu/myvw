@@ -23,6 +23,7 @@ class VWBuildExt(_build_ext):
         if not os.path.isdir(target_dir):
             os.makedirs(target_dir)
         shutil.copy(os.path.join("python", "%s.so" % ext.name), self.get_ext_fullpath(ext.name))
+        shutil.copy(os.path.join("libvw.so"), self.get_ext_fullpath(ext.name))
 
 
 class VWClean(_clean):
