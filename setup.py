@@ -37,7 +37,7 @@ class VWClean(_clean):
 pylibvw = Extension('pylibvw', sources=['python/pylibvw.cc'])
 
 setup(
-    name="pyvw",
+    name="vowpalwabbit",
     version=VERSION,
     url="https://github.com/JohnLangford/vowpal_wabbit",
     maintainer="trbs",
@@ -57,7 +57,7 @@ by distribution packages.
     package_dir={"vowpalwabbit": "python/vowpalwabbit"},
 #    package_dir={'': 'python'},
     scripts=[pjoin('vowpalwabbit', 'vw')],
-#    py_modules=['pyvw'],
+    py_modules=['vowpalwabbit'],
     ext_modules=[pylibvw],
     cmdclass={
         'build_ext': VWBuildExt,
