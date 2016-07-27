@@ -37,19 +37,13 @@ ifeq "CYGWIN" "$(findstring CYGWIN,$(UNAME))"
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
 endif
 ifeq ($(UNAME), Darwin)
-  LIBS = -lboost_program_options-mt -lboost_serialization-mt -l pthread -l z
+   LIBS = -lboost_program_options -lboost_serialization -l pthread -l z
   # On Macs, the location isn't always clear
   #	brew uses /usr/local
   #	but /opt/local seems to be preferred by some users
   #	so we try them both
-  ifneq (,$(wildcard /usr/local/include))
-    BOOST_INCLUDE = -I /usr/local/include
-    BOOST_LIBRARY = -L /usr/local/lib
-  endif
-  ifneq (,$(wildcard /opt/local/include))
-    BOOST_INCLUDE = -I /opt/local/include
-    BOOST_LIBRARY = -L /opt/local/lib
-  endif
+  BOOST_INCLUDE = -I $(CONDA_PREFIX)/include
+  BOOST_LIBRARY = -L $(CONDA_PREFIX)/lib
   NPROCS:=$(shell sysctl -n hw.ncpu)
 endif
 
