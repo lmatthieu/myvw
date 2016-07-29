@@ -8,6 +8,8 @@
 #  $(error Please run 'make' at the top level only)
 #endif
 
+UNAME := $(shell uname)
+
 # The python version and python boost library are resolved and set using setup.py
 # When running make directly PYTHON_VERSION and PYTHON_LIBS env vars can be set to change these defaults
 ifeq ($(PYTHON_VERSION),)
