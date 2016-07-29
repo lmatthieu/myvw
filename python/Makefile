@@ -17,7 +17,7 @@ ifeq ($(PYTHON_VERSION),)
 endif
 
 ifeq ($(PYTHON_LIBS),)
-  PYTHON_LIBS = -l boost_python
+  PYTHON_LIBS = -l boost_python -l boost_program_options -l z
 endif
 
 PYTHON_INCLUDE = $(shell python$(PYTHON_VERSION)-config --includes)
