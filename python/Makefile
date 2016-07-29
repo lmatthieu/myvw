@@ -46,11 +46,11 @@ endif
 STDLIBS = $(BOOST_LIBRARY) $(LIBS) $(PYTHON_LIBS)
 
 $(PYLIBVW): pylibvw.o  ../vowpalwabbit/libvw.a
-	$(CXX) -shared $(EXPORT_DYNAMIC) pylibvw.o $(BOOST_LIBRARY) $(PYTHON_LDFLAGS) $(VWLIBS) $(STDLIBS) -o $(PYLIBVW)
+	$(CXX) $(CFLAGS) -shared $(EXPORT_DYNAMIC) pylibvw.o $(BOOST_LIBRARY) $(PYTHON_LDFLAGS) $(VWLIBS) $(STDLIBS) -o $(PYLIBVW)
 
 pylibvw.o: pylibvw.cc
 	$(info Using Python $(PYTHON_VERSION))
-	$(CXX) -std=c++0x $(PYTHON_INCLUDE) $(BOOST_INCLUDE) -fPIC -c pylibvw.cc -o pylibvw.o
+	$(CXX) $(CFLAGS) -std=c++0x $(PYTHON_INCLUDE) $(BOOST_INCLUDE) -fPIC -c pylibvw.cc -o pylibvw.o
 
 clean:
 	rm -f *.o $(PYLIBVW)
