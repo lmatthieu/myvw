@@ -20,8 +20,8 @@ ifeq ($(PYTHON_LIBS),)
   PYTHON_LIBS = -l boost_python -l boost_program_options -l z
 endif
 
-PYTHON_INCLUDE = $(shell python$(PYTHON_VERSION)-config --includes)
-PYTHON_LDFLAGS = $(shell python$(PYTHON_VERSION)-config --ldflags)
+PYTHON_INCLUDE = $(shell python-config --includes)
+PYTHON_LDFLAGS = $(shell python-config --ldflags)
 
 ifeq (,$(wildcard ../vowpalwabbit/vw.so))
   VWLIBS = ../vowpalwabbit/libvw.a ../vowpalwabbit/liballreduce.a

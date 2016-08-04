@@ -23,8 +23,9 @@ BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib
 NPROCS := 1
 
 ifeq ($(UNAME), Linux)
-  BOOST_LIBRARY += -L /usr/lib/x86_64-linux-gnu
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
+  BOOST_INCLUDE = -I $(CONDA_PREFIX)/include
+  BOOST_LIBRARY = -L $(CONDA_PREFIX)/lib
 endif
 ifeq ($(UNAME), FreeBSD)
   LIBS = -l boost_program_options -l pthread -l z -l compat
@@ -42,9 +43,13 @@ ifeq ($(UNAME), Darwin)
   #	brew uses /usr/local
   #	but /opt/local seems to be preferred by some users
   #	so we try them both
+  CXX=clang++
+  CC=clang
+  CFLAGS+=-I$PREFIX/include -stdlib=libc++ -mmacosx-version-min=10.7
+  LDFLAGS+=-stdlib=libc++ -mmacosx-version-min=10.7
   BOOST_INCLUDE = -I $(CONDA_PREFIX)/include
   BOOST_LIBRARY = -L $(CONDA_PREFIX)/lib
-  NPROCS:=$(shell sysctl -n hw.ncpu)
+  NPROCS:=$(shell cd)
 endif
 
 #LIBS = -l boost_program_options-gcc34 -l pthread -l z
