@@ -1,3 +1,6 @@
 [submodule "sframe"]
 	path = sframe
 	url = https://github.com/turi-code/SFrame
+[submodule "graphlab-sdk"]
+	path = graphlab-sdk
+	url = https://github.com/turi-code/GraphLab-Create-SDK
