@@ -16,11 +16,15 @@ ifeq ($(CXX),)
   exit 1
 endif
 
+PYTHON_SITE_PACKAGES= $(shell python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
+ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 UNAME := $(shell uname)
-LIBS = -l boost_program_options -l pthread -l z
+SFRAME_LIBS = -L $(PYTHON_SITE_PACKAGES)/sframe -l unity_shared
+LIBS = -l boost_program_options -l pthread -l z $(SFRAME_LIBS)
 BOOST_INCLUDE = -I /usr/include
-BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib
+BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib 
 NPROCS := 1
+CFLAGS += -I $(ROOT_DIR)/sframe/oss_src/unity/sdk/ -I $(ROOT_DIR)/sframe/oss_src
 
 ifeq ($(UNAME), Linux)
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
@@ -38,14 +42,14 @@ ifeq "CYGWIN" "$(findstring CYGWIN,$(UNAME))"
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
 endif
 ifeq ($(UNAME), Darwin)
-   LIBS = -lboost_program_options -lboost_serialization -l pthread -l z
+   LIBS = -lboost_program_options -lboost_serialization -l pthread -l z $(SFRAME_LIBS)
   # On Macs, the location isn't always clear
   #	brew uses /usr/local
   #	but /opt/local seems to be preferred by some users
   #	so we try them both
   CXX=clang++
   CC=clang
-  CFLAGS+=-I$PREFIX/include -stdlib=libc++ -mmacosx-version-min=10.7
+  CFLAGS+=-I$(PREFIX)/include -stdlib=libc++ -mmacosx-version-min=10.7
   LDFLAGS+=-stdlib=libc++ -mmacosx-version-min=10.7
   BOOST_INCLUDE = -I $(CONDA_PREFIX)/include
   BOOST_LIBRARY = -L $(CONDA_PREFIX)/lib

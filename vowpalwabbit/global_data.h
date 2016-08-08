@@ -547,9 +547,9 @@ struct vw
 
   std::map< std::string, size_t> name_index_map;
 
-    string sf_path;
-    vector<string> sf_ns;
-    string sf_meta;
+    std::string sf_path;
+    std::vector<std::string> sf_ns;
+    std::string sf_meta;
     bool sf_source;
 
   vw();
