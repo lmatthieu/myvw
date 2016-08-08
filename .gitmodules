@@ -1,6 +1,3 @@
-[submodule "graphlab-sdk"]
-	path = graphlab-sdk
-	url = https://github.com/graphlab-code/GraphLab-Create-SDK.git
 [submodule "sframe"]
 	path = sframe
 	url = https://github.com/turi-code/SFrame
