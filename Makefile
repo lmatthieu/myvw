@@ -24,7 +24,7 @@ LIBS = -l boost_program_options -l pthread -l z $(SFRAME_LIBS)
 BOOST_INCLUDE = -I /usr/include
 BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib 
 NPROCS := 1
-CFLAGS += -I $(ROOT_DIR)/sframe/oss_src/unity/sdk/ -I $(ROOT_DIR)/sframe/oss_src
+CFLAGS += -std=c++11 -I $(ROOT_DIR)/sframe/oss_src/unity/sdk/ -I $(ROOT_DIR)/sframe/oss_src
 
 ifeq ($(UNAME), Linux)
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)
