@@ -350,6 +350,7 @@ float ex_get_simplelabel_label(example_ptr ec) { return ec->l.simple.label; }
 float ex_get_simplelabel_weight(example_ptr ec) { return ec->l.simple.weight; }
 float ex_get_simplelabel_initial(example_ptr ec) { return ec->l.simple.initial; }
 float ex_get_simplelabel_prediction(example_ptr ec) { return ec->pred.scalar; }
+float ex_get_simplelabel_confidence(example_ptr ec) { return ec->confidence; }
 
 uint32_t ex_get_multiclass_label(example_ptr ec) { return ec->l.multi.label; }
 float ex_get_multiclass_weight(example_ptr ec) { return ec->l.multi.weight; }

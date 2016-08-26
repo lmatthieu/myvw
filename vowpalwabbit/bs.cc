@@ -15,6 +15,7 @@ license as described in the file LICENSE.
 #include "rand48.h"
 #include "bs.h"
 #include "vw_exception.h"
+#include <math.h>
 
 using namespace std;
 using namespace LEARNER;
@@ -134,12 +135,13 @@ void print_result(int f, float res, v_array<char> tag, float lb, float ub)
 
 void output_example(vw& all, bs& d, example& ec)
 { label_data& ld = ec.l.simple;
+  float sum = 0, sum_sq = 0, count = d.pred_vec.size();
 
   all.sd->update(ec.test_only, ec.loss, ec.weight, ec.num_features);
   if (ld.label != FLT_MAX && !ec.test_only)
     all.sd->weighted_labels += ld.label * ec.weight;
 
-  if(all.final_prediction_sink.size() != 0)//get confidence interval only when printing out predictions
+  //if(all.final_prediction_sink.size() != 0)//get confidence interval only when printing out predictions
   { d.lb = FLT_MAX;
     d.ub = -FLT_MAX;
     for (unsigned i = 0; i < d.pred_vec.size(); i++)
@@ -147,8 +149,11 @@ void output_example(vw& all, bs& d, example& ec)
         d.ub = (float)d.pred_vec[i];
       if(d.pred_vec[i] < d.lb)
         d.lb = (float)d.pred_vec[i];
+      sum += d.pred_vec[i];
+      sum_sq += powf(d.pred_vec[i], 2.0);
     }
   }
+  ec.confidence = sqrtf(sum_sq / count - powf(sum / count, 2.0));
 
   for (int sink : all.final_prediction_sink)
     print_result(sink, ec.pred.scalar, ec.tag, d.lb, d.ub);
