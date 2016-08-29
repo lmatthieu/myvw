@@ -13,7 +13,6 @@ license as described in the file LICENSE.
 #include "cb.h"
 #include "constant.h"
 #include "feature_group.h"
-#include "cb_explore.h"
 #include "action_score.h"
 
 const unsigned char wap_ldf_namespace  = 126;
@@ -37,15 +36,19 @@ typedef union
   MULTILABEL::labels multilabels;
 } polylabel;
 
+inline void delete_scalars(void* v)
+{ v_array<float>* preds = (v_array<float>*)v;
+  preds->delete_v();
+}
+
 typedef union
-{ float scalar;
-  v_array<float> scalars;//a sequence of scalar predictions
-  ACTION_SCORE::action_scores a_s;//a sequence of classes with scores.
-  uint32_t multiclass;
-  MULTILABEL::labels multilabels;
-  float* probs; // for --probabilities --oaa
-  float prob; // for --probabilities --csoaa_ldf=mc
-  cb_explore_pred action_prob; // for --cb_explore
+{
+	float scalar;
+	v_array<float> scalars;//a sequence of scalar predictions
+	ACTION_SCORE::action_scores a_s;//a sequence of classes with scores.  Also used for probabilities.
+	uint32_t multiclass;
+	MULTILABEL::labels multilabels;
+	float prob; // for --probabilities --csoaa_ldf=mc
 } polyprediction;
 
 typedef unsigned char namespace_index;
@@ -70,6 +73,8 @@ struct example // core example datatype.
       return *this;
     }
 
+    namespace_index index(){ return *_index; }
+
     bool operator==(const iterator& rhs) { return _index == rhs._index; }
     bool operator!=(const iterator& rhs) { return _index != rhs._index; }
   };
@@ -91,7 +96,6 @@ struct example // core example datatype.
   size_t num_features;//precomputed, cause it's fast&easy.
   float partial_prediction;//shared data for prediction.
   float updated_prediction;//estimated post-update prediction.
-  v_array<float> topic_predictions;
   float loss;
   float total_sum_feat_sq;//precomputed, cause it's kind of fast & easy.
   float confidence;
