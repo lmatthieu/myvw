@@ -1102,6 +1102,7 @@ void parse_reductions(vw& all)
   all.l = setup_base(all);
 }
 
+#ifdef SFRAME
 void parse_mltools(vw& all)
 {
   new_options(all, "MLTools")
@@ -1127,6 +1128,7 @@ void parse_mltools(vw& all)
       all.sf_source = true;
   }
 }
+#endif
 
 void add_to_args(vw& all, int argc, char* argv[], int excl_param_count = 0, const char* excl_params[] = NULL)
 { bool skip_next = false;
@@ -1269,7 +1271,9 @@ void parse_modules(vw& all, io_buf& model)
 
   parse_reductions(all);
 
+#ifdef SFRAME
   parse_mltools(all);
+#endif
 
   if (!all.quiet)
   { cerr << "Num weight bits = " << all.num_bits << endl;

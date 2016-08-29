@@ -16,15 +16,22 @@ ifeq ($(CXX),)
   exit 1
 endif
 
+SFRAME_ENABLED := 0
+SFRAME_DEFINES :=
+
+ifeq ($SFRAME_ENABLED, 1)
+  SFRAME_DEFINES += -DSFRAME -I $(ROOT_DIR)/sframe/oss_src/unity/sdk/ -I $(ROOT_DIR)/sframe/oss_src
+  SFRAME_LIBS = -L $(PYTHON_SITE_PACKAGES)/sframe -l unity_shared
+endif
+
 PYTHON_SITE_PACKAGES= $(shell python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 UNAME := $(shell uname)
-SFRAME_LIBS = -L $(PYTHON_SITE_PACKAGES)/sframe -l unity_shared
 LIBS = -l boost_program_options -l pthread -l z $(SFRAME_LIBS)
 BOOST_INCLUDE = -I /usr/include
 BOOST_LIBRARY = -L /usr/local/lib -L /usr/lib 
 NPROCS := 1
-CFLAGS += -std=c++11 -I $(ROOT_DIR)/sframe/oss_src/unity/sdk/ -I $(ROOT_DIR)/sframe/oss_src
+CFLAGS += -std=c++11 $(SFRAME_DEFINES)
 
 ifeq ($(UNAME), Linux)
   NPROCS:=$(shell grep -c ^processor /proc/cpuinfo)

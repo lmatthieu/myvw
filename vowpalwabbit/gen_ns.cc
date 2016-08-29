@@ -1,6 +1,7 @@
 //
 // Created by matthieu on 10/12/15.
 //
+#ifdef SFRAME
 
 #include <set>
 #include <map>
@@ -86,3 +87,4 @@ int gen_ns(string &sframe, vector<string> &ns, string &meta) {
     return 0;
 }
 
+#endif
