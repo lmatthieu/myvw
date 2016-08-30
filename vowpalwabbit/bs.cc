@@ -165,6 +165,7 @@ template <bool is_learn>
 void predict_or_learn(bs& d, base_learner& base, example& ec)
 { vw& all = *d.all;
   bool shouldOutput = all.raw_prediction > 0;
+  float sum = 0, sum_sq = 0, count = d.pred_vec.size();
 
   float weight_temp = ec.weight;
 
@@ -180,6 +181,9 @@ void predict_or_learn(bs& d, base_learner& base, example& ec)
       base.predict(ec, i-1);
 
     d.pred_vec.push_back(ec.pred.scalar);
+    sum += ec.pred.scalar;
+    sum_sq += powf(ec.pred.scalar, 2.0);
+    count += 1;
 
     if (shouldOutput)
     { if (i > 1) outputStringStream << ' ';
@@ -188,6 +192,7 @@ void predict_or_learn(bs& d, base_learner& base, example& ec)
   }
 
   ec.weight = weight_temp;
+  ec.confidence = sqrtf(sum_sq / count - powf(sum / count, 2.0));
 
   switch(d.bs_type)
   { case BS_TYPE_MEAN:
