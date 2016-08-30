@@ -654,6 +654,8 @@ BOOST_PYTHON_MODULE(pylibvw)
   .def("get_simplelabel_weight", &ex_get_simplelabel_weight, "Assuming a simple_label label type, return the importance weight")
   .def("get_simplelabel_initial", &ex_get_simplelabel_initial, "Assuming a simple_label label type, return the initial (baseline) prediction")
   .def("get_simplelabel_prediction", &ex_get_simplelabel_prediction, "Assuming a simple_label label type, return the final prediction")
+  .def("get_simplelabel_confidence", &ex_get_simplelabel_confidence, "Assuming a simple_label label type, BS model, return the prediction confidence")
+
   .def("get_multiclass_label", &ex_get_multiclass_label, "Assuming a multiclass label type, get the true label")
   .def("get_multiclass_weight", &ex_get_multiclass_weight, "Assuming a multiclass label type, get the importance weight")
   .def("get_multiclass_prediction", &ex_get_multiclass_prediction, "Assuming a multiclass label type, get the prediction")
